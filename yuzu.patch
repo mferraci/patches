@@ -1,0 +1,39 @@
+diff --git a/src/input_common/input_engine.cpp b/src/input_common/input_engine.cpp
+index 49f5e7f..91aa96a 100644
+--- a/src/input_common/input_engine.cpp
++++ b/src/input_common/input_engine.cpp
+@@ -58,8 +58,6 @@ void InputEngine::SetHatButton(const PadIdentifier& identifier, int button, u8 v
+ }
+
+ void InputEngine::SetAxis(const PadIdentifier& identifier, int axis, f32 value) {
+-    value /= 2.0f;
+-    value -= 0.5f;
+     {
+         std::scoped_lock lock{mutex};
+         ControllerData& controller = controller_list.at(identifier);
+diff --git a/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp b/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
+index fee510f..07c2b7b 100644
+--- a/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
++++ b/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
+@@ -339,9 +339,7 @@ Id EmitGetAttribute(EmitContext& ctx, IR::Attribute attr, Id vertex) {
+         if (ctx.profile.support_vertex_instance_id) {
+             return ctx.OpBitcast(ctx.F32[1], ctx.OpLoad(ctx.U32[1], ctx.vertex_id));
+         } else {
+-            const Id index{ctx.OpLoad(ctx.U32[1], ctx.vertex_index)};
+-            const Id base{ctx.OpLoad(ctx.U32[1], ctx.base_vertex)};
+-            return ctx.OpBitcast(ctx.F32[1], ctx.OpISub(ctx.U32[1], index, base));
++            return ctx.OpBitcast(ctx.F32[1], ctx.OpLoad(ctx.U32[1], ctx.vertex_index));
+         }
+     case IR::Attribute::BaseInstance:
+         return ctx.OpBitcast(ctx.F32[1], ctx.OpLoad(ctx.U32[1], ctx.base_instance));
+@@ -386,9 +384,7 @@ Id EmitGetAttributeU32(EmitContext& ctx, IR::Attribute attr, Id) {
+         if (ctx.profile.support_vertex_instance_id) {
+             return ctx.OpLoad(ctx.U32[1], ctx.vertex_id);
+         } else {
+-            const Id index{ctx.OpLoad(ctx.U32[1], ctx.vertex_index)};
+-            const Id base{ctx.OpLoad(ctx.U32[1], ctx.base_vertex)};
+-            return ctx.OpISub(ctx.U32[1], index, base);
++            return ctx.OpLoad(ctx.U32[1], ctx.vertex_index);
+         }
+     case IR::Attribute::BaseInstance:
+         return ctx.OpLoad(ctx.U32[1], ctx.base_instance);
