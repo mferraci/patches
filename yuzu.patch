@@ -1,16 +1,3 @@
-diff --git a/src/input_common/input_engine.cpp b/src/input_common/input_engine.cpp
-index 49f5e7f..91aa96a 100644
---- a/src/input_common/input_engine.cpp
-+++ b/src/input_common/input_engine.cpp
-@@ -58,8 +58,6 @@ void InputEngine::SetHatButton(const PadIdentifier& identifier, int button, u8 v
- }
-
- void InputEngine::SetAxis(const PadIdentifier& identifier, int axis, f32 value) {
--    value /= 2.0f;
--    value -= 0.5f;
-     {
-         std::scoped_lock lock{mutex};
-         ControllerData& controller = controller_list.at(identifier);
 diff --git a/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp b/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
 index fee510f..07c2b7b 100644
 --- a/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
@@ -37,3 +24,4 @@ index fee510f..07c2b7b 100644
          }
      case IR::Attribute::BaseInstance:
          return ctx.OpLoad(ctx.U32[1], ctx.base_instance);
+
